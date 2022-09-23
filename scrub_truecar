@@ -1,0 +1,45 @@
+from bs4 import BeautifulSoup
+import requests
+
+def buildUrl(_carMake, _carModel, _carYear):
+    frontUrl = 'https://www.truecar.com/'
+    backUrl = '/build/?postalCode=75080'
+    url = frontUrl + _carMake + '/' + _carModel + '/' + _carYear + backUrl
+    return url
+
+def scrubTrimMsrp(_url):
+    r = requests.get(_url)
+    s = BeautifulSoup(r.content, 'html.parser')
+    a = []
+    textTrim = s.find_all(attrs={"data-test":"trimHighlightsCardName"})
+    textMsrp = s.find_all(attrs={"data-test":"trimHighlightsCardMsrp"})
+    j = len(textTrim)
+    for i in range(j): 
+        b = textTrim[i].string
+        d = textMsrp[i].string
+        a.append([b, d])
+    return a
+
+carMake = input("enter Make:")
+carModel = input("enter Model:")
+carYear = input("enter Year:")
+url = buildUrl(carMake, carModel, carYear)
+print(url)
+trimsAndCost = scrubTrimMsrp(url)
+
+print("A " + carYear + " " + carMake + " " + carModel + " has the following trims:")
+print(trimsAndCost)
+
+
+# url = 'https://www.truecar.com/acura/integra/2023/build/?postalCode=75080'
+# r = requests.get(url)
+# s = BeautifulSoup(r.content, 'html.parser')
+# a = []
+# textTrim = s.find_all(attrs={"data-test":"trimHighlightsCardName"})
+# textMsrp = s.find_all(attrs={"data-test":"trimHighlightsCardMsrp"})
+# j = len(textTrim)
+# for i in range(j): 
+#     b = textTrim[i].string
+#     d = textMsrp[i].string
+#     a.append([b, d])
+# print(a)
