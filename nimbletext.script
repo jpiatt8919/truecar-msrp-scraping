@@ -1,0 +1,7 @@
+nimbletext.script
+
+$ONCE
+create table vehicle_msrps (year string, make string, model string, trim string, msrp money) if not exists; 
+instert into vehicle_msrps (year, make, model, trim, msrp) values
+$EACH
+('$0','$1','$2','$3','$4')
